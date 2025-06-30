@@ -1,4 +1,4 @@
-module github.com/xhofe/115-sdk-go
+module github.com/OpenListTeam/115-sdk-go
 
 go 1.23.4
 
