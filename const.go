@@ -35,4 +35,8 @@ const (
 	ApiFsRbList         = ApiBaseURL + "/open/rb/list"
 	ApiFsRbRevert       = ApiBaseURL + "/open/rb/revert"
 	ApiFsRbDelete       = ApiBaseURL + "/open/rb/del"
+
+	ApiAddOffline    = ApiBaseURL + "/open/offline/add_task_urls"
+	ApiDeleteOffline = ApiBaseURL + "/open/offline/del_task"
+	ApiOfflineList   = ApiBaseURL + "/open/offline/get_task_list"
 )
