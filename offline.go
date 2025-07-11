@@ -101,18 +101,18 @@ func (t *OfflineTask) IsFailed() bool {
 
 func (t *OfflineTask) GetStatus() string {
 	if t.IsTodo() {
-		return "准备开始离线下载"
+		return "Ready to start offline download"
 	}
 	if t.IsDone() {
-		return "离线下载完成"
+		return "Offline download completed"
 	}
 	if t.IsFailed() {
-		return "离线下载失败"
+		return "Offline download failed"
 	}
 	if t.IsRunning() {
-		return "离线任务下载中"
+		return "Offline task downloading"
 	}
-	return fmt.Sprintf("未知状态: %d", t.Status)
+	return fmt.Sprintf("Unknown status: %d", t.Status)
 }
 
 // OfflineTaskList  https://www.yuque.com/115yun/open/av2mluz7uwigz74k
