@@ -137,7 +137,7 @@ func (c *Client) GetFiles(ctx context.Context, req *GetFilesReq) (*GetFilesResp,
 }
 
 type GetFolderInfoResp struct {
-	Count        string `json:"count"`
+	Count        int64  `json:"count"`
 	Size         string `json:"size"`
 	FolderCount  int64  `json:"folder_count"`
 	PlayLong     int64  `json:"play_long"`
@@ -152,7 +152,7 @@ type GetFolderInfoResp struct {
 	OpenTime     int64  `json:"open_time"`
 	FileCategory string `json:"file_category"`
 	Paths        []struct {
-		FileID   int64  `json:"file_id"`
+		FileID   string `json:"file_id"`
 		FileName string `json:"file_name"`
 	} `json:"paths"`
 }
@@ -162,6 +162,18 @@ func (c *Client) GetFolderInfo(ctx context.Context, fileID string) (*GetFolderIn
 	var resp GetFolderInfoResp
 	_, err := c.AuthRequest(ctx, ApiFsGetFolderInfo, http.MethodGet, &resp, ReqWithQuery(Form{
 		"file_id": fileID,
+	}))
+	if err != nil {
+		return nil, err
+	}
+	return &resp, err
+}
+
+// GetFolderInfoByPath: https://www.yuque.com/115yun/open/rl8zrhe2nag21dfw
+func (c *Client) GetFolderInfoByPath(ctx context.Context, path string) (*GetFolderInfoResp, error) {
+	var resp GetFolderInfoResp
+	_, err := c.AuthRequest(ctx, ApiFsGetFolderInfo, http.MethodPost, &resp, ReqWithForm(Form{
+		"path": path,
 	}))
 	if err != nil {
 		return nil, err
