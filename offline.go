@@ -124,3 +124,92 @@ func (c *Client) OfflineTaskList(ctx context.Context, page int64) (*OfflineTaskL
 	}))
 	return &resp, err
 }
+
+type OfflineQuotaExpireInfo struct {
+	Surplus    int   `json:"surplus"`
+	ExpireTime int64 `json:"expire_time"`
+}
+
+type OfflineQuotaPackage struct {
+	Surplus    int                      `json:"surplus"`
+	Used       int                      `json:"used"`
+	Count      int                      `json:"count"`
+	Name       string                   `json:"name"`
+	ExpireInfo []OfflineQuotaExpireInfo `json:"expire_info"`
+}
+
+type OfflineQuotaInfoResp struct {
+	Package []OfflineQuotaPackage `json:"package"`
+	Count   int                   `json:"count"`
+	Surplus int                   `json:"surplus"`
+	Used    int                   `json:"used"`
+}
+
+// OfflineQuotaInfo https://www.yuque.com/115yun/open/gif2n3smh54kyg0p
+func (c *Client) OfflineQuotaInfo(ctx context.Context) (*OfflineQuotaInfoResp, error) {
+	var resp OfflineQuotaInfoResp
+	_, err := c.AuthRequest(ctx, ApiOfflineQuotaInfo, http.MethodGet, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, err
+}
+
+type TorrentFileItem struct {
+	Size   int64  `json:"size"`
+	Path   string `json:"path"`
+	Wanted int    `json:"wanted"`
+}
+
+type TorrentInfoResp struct {
+	FileSize        int64             `json:"file_size"`
+	TorrentName     string            `json:"torrent_name"`
+	FileCount       int               `json:"file_count"`
+	InfoHash        string            `json:"info_hash"`
+	TorrentFileList []TorrentFileItem `json:"torrent_filelist"`
+}
+
+// ParseTorrent https://www.yuque.com/115yun/open/evez3u50cemoict1
+func (c *Client) ParseTorrent(ctx context.Context, torrentSha1, pickCode string) (*TorrentInfoResp, error) {
+	var resp TorrentInfoResp
+	_, err := c.AuthRequest(ctx, ApiOfflineTorrent, http.MethodPost, &resp, ReqWithForm(Form{
+		"torrent_sha1": torrentSha1,
+		"pick_code":    pickCode,
+	}))
+	if err != nil {
+		return nil, err
+	}
+	return &resp, err
+}
+
+type AddOfflineTaskBTReq struct {
+	InfoHash    string `json:"info_hash"`
+	Wanted      string `json:"wanted"`
+	SavePath    string `json:"save_path"`
+	TorrentSha1 string `json:"torrent_sha1"`
+	PickCode    string `json:"pick_code"`
+	WpPathID    string `json:"wp_path_id"`
+}
+
+// AddOfflineTaskBT https://www.yuque.com/115yun/open/svfe4unlhayvluly
+func (c *Client) AddOfflineTaskBT(ctx context.Context, req *AddOfflineTaskBTReq) error {
+	var resp any
+	_, err := c.AuthRequest(ctx, ApiAddOfflineBT, http.MethodPost, &resp, ReqWithForm(Form{
+		"info_hash":    req.InfoHash,
+		"wanted":       req.Wanted,
+		"save_path":    req.SavePath,
+		"torrent_sha1": req.TorrentSha1,
+		"pick_code":    req.PickCode,
+		"wp_path_id":   req.WpPathID,
+	}))
+	return err
+}
+
+// ClearOfflineTask https://www.yuque.com/115yun/open/uu5i4urb5ylqwfy4
+func (c *Client) ClearOfflineTask(ctx context.Context, flag int) error {
+	var resp any
+	_, err := c.AuthRequest(ctx, ApiClearOffline, http.MethodPost, &resp, ReqWithForm(Form{
+		"flag": strconv.Itoa(flag),
+	}))
+	return err
+}

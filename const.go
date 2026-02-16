@@ -36,7 +36,24 @@ const (
 	ApiFsRbRevert       = ApiBaseURL + "/open/rb/revert"
 	ApiFsRbDelete       = ApiBaseURL + "/open/rb/del"
 
-	ApiAddOffline    = ApiBaseURL + "/open/offline/add_task_urls"
-	ApiDeleteOffline = ApiBaseURL + "/open/offline/del_task"
-	ApiOfflineList   = ApiBaseURL + "/open/offline/get_task_list"
+	ApiAddOffline       = ApiBaseURL + "/open/offline/add_task_urls"
+	ApiDeleteOffline    = ApiBaseURL + "/open/offline/del_task"
+	ApiOfflineList      = ApiBaseURL + "/open/offline/get_task_list"
+	ApiOfflineQuotaInfo = ApiBaseURL + "/open/offline/get_quota_info"
+	ApiOfflineTorrent   = ApiBaseURL + "/open/offline/torrent"
+	ApiAddOfflineBT     = ApiBaseURL + "/open/offline/add_task_bt"
+	ApiClearOffline     = ApiBaseURL + "/open/offline/clear_task"
+)
+
+// Video API
+const (
+	ApiVideoPlay     = ApiBaseURL + "/open/video/play"
+	ApiVideoHistory  = ApiBaseURL + "/open/video/history"
+	ApiVideoSubtitle = ApiBaseURL + "/open/video/subtitle"
+	ApiVideoPush     = ApiBaseURL + "/open/video/video_push"
+)
+
+// VIP API
+const (
+	ApiVipQrURL = ApiBaseURL + "/open/vip/qr_url"
 )

@@ -291,9 +291,9 @@ func (c *Client) DownURL(ctx context.Context, pickCode string, ua string) (DownU
 }
 
 type UpdateFileReq struct {
-	FileID  string `json:"file_id"`   // 需要更改名字的文件(夹)ID
-	FileNma string `json:"file_name"` // 新的文件(夹)名字(文件夹名称限制255字节)
-	Star    string `json:"star"`      // 是否星标；1：星标；0；取消星标
+	FileID   string `json:"file_id"`   // 需要更改名字的文件(夹)ID
+	FileName string `json:"file_name"` // 新的文件(夹)名字(文件夹名称限制255字节)
+	Star     string `json:"star"`      // 是否星标；1：星标；0；取消星标
 }
 
 type UpdateFileResp struct {
@@ -306,7 +306,7 @@ func (c *Client) UpdateFile(ctx context.Context, req *UpdateFileReq) (*UpdateFil
 	var resp UpdateFileResp
 	_, err := c.AuthRequest(ctx, ApiFsUpdate, http.MethodPost, &resp, ReqWithForm(Form{
 		"file_id":   req.FileID,
-		"file_name": req.FileNma,
+		"file_name": req.FileName,
 		"star":      req.Star,
 	}))
 	if err != nil {
@@ -376,6 +376,7 @@ func (c *Client) RbList(ctx context.Context, limit, offset int64) (*RbListResp, 
 	if err != nil {
 		return nil, err
 	}
+	resp.Files = make(map[string]RbListResp_FileInfo)
 	for key, value := range rawFiles {
 		if SliceContains([]string{"offset", "limit", "count", "rb_pass"}, key) {
 			continue
