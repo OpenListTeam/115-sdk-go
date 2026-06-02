@@ -2,6 +2,7 @@
 package sdk
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"net/http"
@@ -156,6 +157,32 @@ type GetFolderInfoResp struct {
 		FileName string `json:"file_name"`
 	} `json:"paths"`
 }
+
+func (r *GetFolderInfoResp) UnmarshalJSON(data []byte) error {
+	data = bytes.TrimSpace(data)
+	if len(data) == 0 {
+		return nil
+	}
+	if data[0] == '[' {
+		var resp []getFolderInfoResp
+		if err := json.Unmarshal(data, &resp); err != nil {
+			return err
+		}
+		if len(resp) == 0 {
+			return ErrObjectNotFound
+		}
+		*r = GetFolderInfoResp(resp[0])
+		return nil
+	}
+	var resp getFolderInfoResp
+	if err := json.Unmarshal(data, &resp); err != nil {
+		return err
+	}
+	*r = GetFolderInfoResp(resp)
+	return nil
+}
+
+type getFolderInfoResp GetFolderInfoResp
 
 // GetFolderInfo: https://www.yuque.com/115yun/open/rl8zrhe2nag21dfw
 func (c *Client) GetFolderInfo(ctx context.Context, fileID string) (*GetFolderInfoResp, error) {

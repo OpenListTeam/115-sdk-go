@@ -1,6 +1,11 @@
 package sdk
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
+
+var ErrObjectNotFound = errors.New("object not found")
 
 type Error struct {
 	Code    int64  `json:"code"`
