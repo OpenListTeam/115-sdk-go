@@ -34,13 +34,18 @@ func (c *Client) AddOfflineTaskURIs(ctx context.Context, uris []string, saveDirI
 	}
 
 	var hashes []string
+	var firstErr error
 	for _, item := range resp {
 		if item.State && item.InfoHash != "" {
 			hashes = append(hashes, item.InfoHash)
+		} else if firstErr == nil {
+			firstErr = &Error{Code: item.Code, Message: item.Message}
 		}
 	}
-
-	return hashes, err
+	if len(hashes) == 0 && firstErr != nil {
+		return nil, firstErr
+	}
+	return hashes, nil
 }
 
 // DeleteOfflineTask  https://www.yuque.com/115yun/open/pmgwc86lpcy238nw
